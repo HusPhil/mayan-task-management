@@ -88,7 +88,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
         <div className="px-5 py-3">
           <div className="flex items-start gap-3">
             <Checkbox
-              className={"mt-0.5"}
+              className={"mt-0.5 cursor-pointer"}
               checked={task.status === TaskStatus.COMPLETED}
             />
             <div>
