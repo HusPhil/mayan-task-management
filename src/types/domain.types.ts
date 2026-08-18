@@ -1,4 +1,4 @@
-const TaskStatus = {
+export const TaskStatus = {
   INCOMPLETE: 0,
   COMPLETED: 1,
 } as const
