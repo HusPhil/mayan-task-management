@@ -78,7 +78,7 @@ export default function CreateTaskSheet({}: CreateTaskSheetProps) {
             Submit
           </Button>
           <SheetClose>
-            <Button className={"w-full"} variant={"destructive"}>
+            <Button className={"w-full"} variant={"outline"}>
               Cancel
             </Button>
           </SheetClose>

@@ -3,6 +3,17 @@ import { TaskStatus } from "@/types/domain.types"
 import { Card } from "./ui/card"
 import { Checkbox } from "./ui/checkbox"
 import { formatDate } from "@/utils/formatDate"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu"
+import { Button } from "./ui/button"
+import { EllipsisVerticalIcon, PencilIcon, Trash2 } from "lucide-react"
+import DeleteTaskSheet from "./sheets/DeleteTaskSheet"
+import EditTaskSheet from "./sheets/EditTaskSheet"
+import { useState } from "react"
 
 const dummyData: TaskRead[] = [
   {
@@ -77,15 +88,48 @@ const dummyData: TaskRead[] = [
   },
 ].slice(0, 3)
 
-interface TaskCardProps {
-  task: TaskRead
+interface DropDownOptionsProps {
+  task_id: string
+  onEdit: (task_id: string) => void
+  onDelete: (task_id: string) => void
 }
 
-const TaskCard = ({ task }: TaskCardProps) => {
+function DropDownOptions({ task_id, onDelete, onEdit }: DropDownOptionsProps) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Button variant={"ghost"} size={"icon-xs"}>
+          <EllipsisVerticalIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => onEdit(task_id)}>
+          <PencilIcon />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          variant="destructive"
+          onClick={() => onDelete(task_id)}
+        >
+          <Trash2 />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+interface TaskCardProps {
+  task: TaskRead
+  onEdit: (task_id: string) => void
+  onDelete: (task_id: string) => void
+}
+
+function TaskCard({ onDelete, onEdit, task }: TaskCardProps) {
   return (
     <div className="h-fit p-1">
-      <Card key={task.id} className="p-0">
-        <div className="px-5 py-3">
+      <Card key={task.id} className="p-0 transition-colors hover:bg-muted/50">
+        <div className="flex items-start justify-between px-5 py-3">
           <div className="flex items-start gap-3">
             <Checkbox
               className={"mt-0.5 cursor-pointer"}
@@ -105,17 +149,56 @@ const TaskCard = ({ task }: TaskCardProps) => {
               </p>
             </div>
           </div>
+          <DropDownOptions
+            task_id={task.id}
+            onDelete={onDelete}
+            onEdit={onEdit}
+          />
         </div>
       </Card>
     </div>
   )
 }
 export default function TaskList() {
+  const [taskToEdit, setTaskToEdit] = useState<TaskRead | null>()
+  const [taskToDelete, setTaskToDelete] = useState<TaskRead | null>()
+
+  const handleEdit = (task_id: string) => {
+    console.log("EDIT: ", task_id)
+    const task = dummyData.find((t) => t.id === task_id)
+    setTaskToEdit(task)
+  }
+
+  const handleDelete = (task_id: string) => {
+    console.log("DELETE: ", task_id)
+    const task = dummyData.find((t) => t.id === task_id)
+    setTaskToDelete(task)
+  }
+
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
-      {dummyData.map((t) => (
-        <TaskCard key={t.id} task={t} />
-      ))}
+    <div>
+      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
+        {dummyData.map((t) => (
+          <TaskCard
+            key={t.id}
+            task={t}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+          />
+        ))}
+      </div>
+      <DeleteTaskSheet
+        task={taskToDelete ?? null}
+        onOpenChange={(open) => {
+          if (!open) setTaskToDelete(null)
+        }}
+      />
+      <EditTaskSheet
+        task={taskToEdit ?? null}
+        onOpenChange={(open) => {
+          if (!open) setTaskToEdit(null)
+        }}
+      />
     </div>
   )
 }
