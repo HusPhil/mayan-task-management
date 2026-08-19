@@ -6,16 +6,19 @@ import {
   SheetDescription,
   SheetFooter,
   SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "../ui/sheet"
 import { Button } from "../ui/button"
-import { Plus } from "lucide-react"
+import { AlertCircle, Plus } from "lucide-react"
 import { Input } from "../ui/input"
-import type { TaskCreate, TaskRead } from "@/types/api.types"
+import type { TaskCreate } from "@/types/api.types"
+import useCreateTask from "@/hooks/mutations/useCreateTask"
 
 interface CreateTaskSheetProps {}
 
 export default function CreateTaskSheet({}: CreateTaskSheetProps) {
+  const { isPending, mutate: createTask, isError } = useCreateTask()
   const [open, setOpen] = useState(false)
 
   const titleInputRef = useRef<HTMLInputElement>(null)
@@ -34,7 +37,12 @@ export default function CreateTaskSheet({}: CreateTaskSheetProps) {
       description: descText,
     }
 
-    console.log(taskCreate)
+    createTask(taskCreate, {
+      onSuccess: () => {
+        setOpen(false)
+      },
+      onError: (error) => console.error(error),
+    })
   }
 
   return (
@@ -46,8 +54,14 @@ export default function CreateTaskSheet({}: CreateTaskSheetProps) {
       </SheetTrigger>
       <SheetContent side="bottom">
         <SheetHeader>
-          Create new Task
+          <SheetTitle>Create new Task</SheetTitle>
           <SheetDescription>Add a new Task to your list</SheetDescription>
+          {isError && (
+            <div className="mt-2 flex items-center gap-2 rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <span>{"Something went wrong. Please try again."}</span>
+            </div>
+          )}
         </SheetHeader>
 
         <div className="space-y-3 px-8">
@@ -71,11 +85,12 @@ export default function CreateTaskSheet({}: CreateTaskSheetProps) {
 
         <SheetFooter>
           <Button
+            disabled={isPending}
             className={"w-full"}
             variant={"default"}
             onClick={handleSubmit}
           >
-            Submit
+            {isPending ? "Creating Task…" : "Submit"}
           </Button>
           <SheetClose>
             <Button className={"w-full"} variant={"outline"}>

@@ -16,12 +16,12 @@ import EditTaskSheet from "./sheets/EditTaskSheet"
 import { useState } from "react"
 
 interface DropDownOptionsProps {
-  task_id: string
-  onEdit: (task_id: string) => void
-  onDelete: (task_id: string) => void
+  taskId: string
+  onEdit: (taskId: string) => void
+  onDelete: (taskId: string) => void
 }
 
-function DropDownOptions({ task_id, onDelete, onEdit }: DropDownOptionsProps) {
+function DropDownOptions({ taskId, onDelete, onEdit }: DropDownOptionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -30,13 +30,13 @@ function DropDownOptions({ task_id, onDelete, onEdit }: DropDownOptionsProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => onEdit(task_id)}>
+        <DropdownMenuItem onClick={() => onEdit(taskId)}>
           <PencilIcon />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
-          onClick={() => onDelete(task_id)}
+          onClick={() => onDelete(taskId)}
         >
           <Trash2 />
           Delete
@@ -48,8 +48,8 @@ function DropDownOptions({ task_id, onDelete, onEdit }: DropDownOptionsProps) {
 
 interface TaskCardProps {
   task: TaskRead
-  onEdit: (task_id: string) => void
-  onDelete: (task_id: string) => void
+  onEdit: (taskId: string) => void
+  onDelete: (taskId: string) => void
 }
 
 function TaskCard({ onDelete, onEdit, task }: TaskCardProps) {
@@ -77,7 +77,7 @@ function TaskCard({ onDelete, onEdit, task }: TaskCardProps) {
             </div>
           </div>
           <DropDownOptions
-            task_id={task.id}
+            taskId={task.id}
             onDelete={onDelete}
             onEdit={onEdit}
           />
@@ -95,13 +95,13 @@ export default function TaskList({ tasks }: TaskListProps) {
   const [taskToEdit, setTaskToEdit] = useState<TaskRead | null>()
   const [taskToDelete, setTaskToDelete] = useState<TaskRead | null>()
 
-  const handleEdit = (task_id: string) => {
-    const task = tasks.find((t) => t.id === task_id)
+  const handleEdit = (taskId: string) => {
+    const task = tasks.find((t) => t.id === taskId)
     setTaskToEdit(task)
   }
 
-  const handleDelete = (task_id: string) => {
-    const task = tasks.find((t) => t.id === task_id)
+  const handleDelete = (taskId: string) => {
+    const task = tasks.find((t) => t.id === taskId)
     setTaskToDelete(task)
   }
 
