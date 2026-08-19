@@ -14,6 +14,8 @@ import { EllipsisVerticalIcon, PencilIcon, Trash2 } from "lucide-react"
 import DeleteTaskSheet from "./sheets/DeleteTaskSheet"
 import EditTaskSheet from "./sheets/EditTaskSheet"
 import { useState } from "react"
+import { queryOptions, useQuery } from "@tanstack/react-query"
+import { tasksQueryOption } from "@/api/tasks.options"
 
 const dummyData: TaskRead[] = [
   {
@@ -86,7 +88,7 @@ const dummyData: TaskRead[] = [
     created_at: "2026-08-18T09:34:13.564469Z",
     status: TaskStatus.INCOMPLETE,
   },
-].slice(0, 3)
+].slice(0, 13)
 
 interface DropDownOptionsProps {
   task_id: string
@@ -159,26 +161,27 @@ function TaskCard({ onDelete, onEdit, task }: TaskCardProps) {
     </div>
   )
 }
+
 export default function TaskList() {
+  const { data } = useQuery(tasksQueryOption())
+
   const [taskToEdit, setTaskToEdit] = useState<TaskRead | null>()
   const [taskToDelete, setTaskToDelete] = useState<TaskRead | null>()
 
   const handleEdit = (task_id: string) => {
-    console.log("EDIT: ", task_id)
     const task = dummyData.find((t) => t.id === task_id)
     setTaskToEdit(task)
   }
 
   const handleDelete = (task_id: string) => {
-    console.log("DELETE: ", task_id)
     const task = dummyData.find((t) => t.id === task_id)
     setTaskToDelete(task)
   }
 
   return (
     <div>
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
-        {dummyData.map((t) => (
+      <div className="flex flex-1 flex-col gap-3 overflow-y-auto pb-5">
+        {data?.map((t) => (
           <TaskCard
             key={t.id}
             task={t}
