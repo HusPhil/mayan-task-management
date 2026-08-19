@@ -6,10 +6,13 @@ import {
   SheetDescription,
   SheetFooter,
   SheetHeader,
+  SheetTitle,
 } from "../ui/sheet"
 import { Input } from "../ui/input"
-import type { TaskRead } from "@/types/api.types"
+import type { TaskRead, TaskUpdate } from "@/types/api.types"
 import { Button } from "../ui/button"
+import useEditTask from "@/hooks/mutations/useEditTask"
+import { AlertCircle } from "lucide-react"
 
 interface EditTaskSheetProps {
   task: TaskRead | null
@@ -20,15 +23,49 @@ export default function EditTaskSheet({
   task,
   onOpenChange,
 }: EditTaskSheetProps) {
+  const { isPending, isError, mutate: editTask } = useEditTask()
+
   const titleInputRef = useRef<HTMLInputElement>(null)
   const descInputRef = useRef<HTMLInputElement>(null)
+
+  const handleEditTask = () => {
+    if (!task) return
+
+    const titleText = titleInputRef.current?.value
+    const descText = descInputRef.current?.value
+
+    if (!titleText || !descText!) {
+      return
+    }
+
+    const taskUpdate: TaskUpdate = {
+      title: titleText,
+      description: descText,
+    }
+
+    editTask(
+      { taskId: task?.id, taskUpdate },
+      {
+        onSuccess: () => {
+          onOpenChange(false)
+        },
+        onError: (error) => console.error(error),
+      }
+    )
+  }
 
   return (
     <Sheet open={task != null} onOpenChange={onOpenChange}>
       <SheetContent side="bottom">
         <SheetHeader>
-          {`Edit task '${task?.title}'`}
+          <SheetTitle>{task && `Edit task '${task?.title}'`}</SheetTitle>
           <SheetDescription>Update the task details below</SheetDescription>
+          {isError && (
+            <div className="mt-2 flex items-center gap-2 rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <span>{"Something went wrong. Please try again."}</span>
+            </div>
+          )}
         </SheetHeader>
         <div className="space-y-3 px-8">
           <div className="flex flex-col gap-1">
@@ -52,8 +89,13 @@ export default function EditTaskSheet({
         </div>
 
         <SheetFooter>
-          <Button className={"w-full"} variant={"default"}>
-            Submit
+          <Button
+            disabled={isPending}
+            className={"w-full"}
+            variant={"default"}
+            onClick={handleEditTask}
+          >
+            {isPending ? "Editing Task…" : "Submit"}
           </Button>
           <SheetClose>
             <Button className={"w-full"} variant={"outline"}>
