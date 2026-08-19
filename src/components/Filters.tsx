@@ -76,6 +76,7 @@ export default function Filters({ filters, onUpdateFilters }: FiltersProps) {
           className="pl-8"
           placeholder="Search tasks..."
           onChange={handleQueryFilter}
+          defaultValue={filters.query}
         />
       </div>
     </div>

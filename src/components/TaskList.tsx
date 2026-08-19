@@ -61,7 +61,7 @@ interface TaskCardProps {
 }
 
 function TaskCard({ task, onDelete, onEdit, onCheckError }: TaskCardProps) {
-  const { isPending, isError, mutate: checkTask } = useEditTask()
+  const { isPending, mutate: checkTask } = useEditTask()
 
   const handleCompleteTask = (completed: boolean) => {
     const taskUpdate: TaskUpdate = {
@@ -80,6 +80,7 @@ function TaskCard({ task, onDelete, onEdit, onCheckError }: TaskCardProps) {
       }
     )
   }
+
   return (
     <div className="h-fit p-1">
       <Card key={task.id} className="p-0 transition-colors hover:bg-muted/50">
@@ -141,6 +142,14 @@ export default function TaskList({ tasks }: TaskListProps) {
 
   const handleCheckError = (isError: boolean) => {
     setIsCheckEror(isError)
+  }
+
+  if (tasks.length <= 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-border py-12 text-center text-sm text-muted-foreground">
+        No tasks found.
+      </div>
+    )
   }
 
   return (

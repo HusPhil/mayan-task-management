@@ -50,14 +50,21 @@ export default function DeleteTaskSheet({
         <SheetFooter>
           <Button
             disabled={isPending}
-            className={"w-full"}
+            className={"w-full disabled:cursor-not-allowed"}
             variant={"destructive"}
             onClick={handleDeleteTask}
           >
             {isPending ? "Deleting Task…" : "Confirm"}
-          </Button>
-          <SheetClose>
-            <Button className={"w-full"} variant={"default"}>
+          </Button>{" "}
+          <SheetClose
+            disabled={isPending}
+            className={"disabled:cursor-not-allowed"}
+          >
+            <Button
+              disabled={isPending}
+              className={"w-full"}
+              variant={"default"}
+            >
               Cancel
             </Button>
           </SheetClose>

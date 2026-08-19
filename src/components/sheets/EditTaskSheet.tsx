@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import { useRef } from "react"
 import {
   Sheet,
   SheetClose,
@@ -91,14 +91,21 @@ export default function EditTaskSheet({
         <SheetFooter>
           <Button
             disabled={isPending}
-            className={"w-full"}
+            className={"w-full disabled:cursor-not-allowed"}
             variant={"default"}
             onClick={handleEditTask}
           >
             {isPending ? "Editing Task…" : "Submit"}
-          </Button>
-          <SheetClose>
-            <Button className={"w-full"} variant={"outline"}>
+          </Button>{" "}
+          <SheetClose
+            disabled={isPending}
+            className={"disabled:cursor-not-allowed"}
+          >
+            <Button
+              disabled={isPending}
+              className={"w-full"}
+              variant={"outline"}
+            >
               Cancel
             </Button>
           </SheetClose>

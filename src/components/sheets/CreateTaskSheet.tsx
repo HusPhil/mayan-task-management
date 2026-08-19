@@ -86,14 +86,21 @@ export default function CreateTaskSheet({}: CreateTaskSheetProps) {
         <SheetFooter>
           <Button
             disabled={isPending}
-            className={"w-full"}
+            className={"w-full disabled:cursor-not-allowed"}
             variant={"default"}
             onClick={handleSubmit}
           >
             {isPending ? "Creating Task…" : "Submit"}
           </Button>
-          <SheetClose>
-            <Button className={"w-full"} variant={"outline"}>
+          <SheetClose
+            disabled={isPending}
+            className={"disabled:cursor-not-allowed"}
+          >
+            <Button
+              disabled={isPending}
+              className={"w-full"}
+              variant={"outline"}
+            >
               Cancel
             </Button>
           </SheetClose>
