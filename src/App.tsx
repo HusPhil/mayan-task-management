@@ -5,15 +5,20 @@ import TaskList from "./components/TaskList"
 import { tasksQueryOption } from "./api/tasks.options"
 import TaskListError from "./components/TaskListError"
 import TaskListLoading from "./components/TaskListLoading"
+import useTaskFilters from "./hooks/useTaskFilters"
 
 export function App() {
-  const { data: tasks, isLoading, error } = useQuery(tasksQueryOption())
+  const { filters, updateFilters } = useTaskFilters()
+  const { data: tasks, isLoading, error } = useQuery(tasksQueryOption(filters))
 
   return (
     <div className="flex h-screen items-center justify-center">
       <div className="flex h-full max-w-lg flex-1 flex-col px-3 md:px-0">
         <Header />
-        <Filters />
+        <Filters filters={filters} onUpdateFilters={updateFilters} />
+        <p>{filters?.query}</p>
+        <p>{filters?.status}</p>
+        <p>{filters?.sort}</p>
         {isLoading ? (
           <TaskListLoading />
         ) : error ? (

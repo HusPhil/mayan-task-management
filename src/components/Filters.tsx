@@ -1,43 +1,64 @@
 import { Button } from "./ui/button"
 import { TaskStatus } from "@/types/domain.types"
 import { Input } from "./ui/input"
-import { Search, SearchIcon } from "lucide-react"
-import { useState } from "react"
+import { Search } from "lucide-react"
+import type { TaskSearchParams } from "@/api/params"
 
 interface FilterChipsProps {
-  activeFilter: string
-  filters: string[]
-  onSetFilter: (filter: string) => void
+  activeStatusFilters?: TaskStatus[]
+  statusFilters: string[]
+  onSetFilter: (filter: TaskStatus | null) => void
 }
 
-function FilterChips({ onSetFilter, activeFilter, filters }: FilterChipsProps) {
+function StatusFilterChips({
+  onSetFilter,
+  activeStatusFilters,
+  statusFilters,
+}: FilterChipsProps) {
   return (
     <div className="space-x-1">
-      {filters.map((filter) => (
-        <Button
-          key={filter}
-          className={"capitalize"}
-          variant={activeFilter === filter ? "default" : "outline"}
-          onClick={() => onSetFilter(filter)}
-        >
-          {filter.toLowerCase()}
-        </Button>
-      ))}
+      {statusFilters.map((filter) => {
+        const isAll = filter === "All"
+
+        const filterValue = isAll
+          ? null
+          : TaskStatus[filter as keyof typeof TaskStatus]
+
+        const isActive = isAll
+          ? !activeStatusFilters || activeStatusFilters.length === 0
+          : activeStatusFilters?.includes(filterValue as TaskStatus)
+
+        return (
+          <Button
+            key={filter}
+            className={"capitalize"}
+            variant={isActive ? "default" : "outline"}
+            onClick={() => onSetFilter(filterValue)}
+          >
+            {filter.toLowerCase()}
+          </Button>
+        )
+      })}
     </div>
   )
 }
 
-interface FiltersProps {}
+interface FiltersProps {
+  filters: TaskSearchParams
+  onUpdateFilters: (filter: TaskSearchParams) => void
+}
 
-export default function Filters({}: FiltersProps) {
-  const [activefilter, setActiveFilter] = useState<string>("All")
-
+export default function Filters({ filters, onUpdateFilters }: FiltersProps) {
   return (
     <div className="mb-3 space-y-2">
-      <FilterChips
-        onSetFilter={(filter: string) => setActiveFilter(filter)}
-        activeFilter={activefilter}
-        filters={["All", ...Object.keys(TaskStatus)]}
+      <StatusFilterChips
+        onSetFilter={(statusFilter: TaskStatus | null) => {
+          const status =
+            statusFilter != null ? [Number(statusFilter)] : undefined
+          onUpdateFilters({ ...filters, status })
+        }}
+        activeStatusFilters={filters.status as TaskStatus[]}
+        statusFilters={["All", ...Object.keys(TaskStatus)]}
       />
       <div className="relative">
         <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />

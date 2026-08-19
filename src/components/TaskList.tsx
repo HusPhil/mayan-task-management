@@ -14,8 +14,6 @@ import { EllipsisVerticalIcon, PencilIcon, Trash2 } from "lucide-react"
 import DeleteTaskSheet from "./sheets/DeleteTaskSheet"
 import EditTaskSheet from "./sheets/EditTaskSheet"
 import { useState } from "react"
-import { queryOptions, useQuery } from "@tanstack/react-query"
-import { tasksQueryOption } from "@/api/tasks.options"
 
 const dummyData: TaskRead[] = [
   {
