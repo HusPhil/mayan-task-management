@@ -19,7 +19,7 @@ export function App() {
         ) : error ? (
           <TaskListError message={error.message} />
         ) : tasks == null ? (
-          <TaskListError message="Tasks is not defined" />
+          <TaskListError message="Failed to fetch tasks. Please try again." />
         ) : (
           <TaskList tasks={tasks} />
         )}
