@@ -162,9 +162,11 @@ function TaskCard({ onDelete, onEdit, task }: TaskCardProps) {
   )
 }
 
-export default function TaskList() {
-  const { data } = useQuery(tasksQueryOption())
+interface TaskListProps {
+  tasks: TaskRead[]
+}
 
+export default function TaskList({ tasks }: TaskListProps) {
   const [taskToEdit, setTaskToEdit] = useState<TaskRead | null>()
   const [taskToDelete, setTaskToDelete] = useState<TaskRead | null>()
 
@@ -181,7 +183,7 @@ export default function TaskList() {
   return (
     <div>
       <div className="flex flex-1 flex-col gap-3 overflow-y-auto pb-5">
-        {data?.map((t) => (
+        {tasks?.map((t) => (
           <TaskCard
             key={t.id}
             task={t}

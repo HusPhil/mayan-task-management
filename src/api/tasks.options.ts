@@ -1,4 +1,4 @@
-import { queryOptions, type QueryOptions } from "@tanstack/react-query"
+import { queryOptions } from "@tanstack/react-query"
 import { client } from "./client"
 import type { TaskRead } from "@/types/api.types"
 
