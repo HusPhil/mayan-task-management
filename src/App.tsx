@@ -16,9 +16,6 @@ export function App() {
       <div className="flex h-full max-w-lg flex-1 flex-col px-3 md:px-0">
         <Header />
         <Filters filters={filters} onUpdateFilters={updateFilters} />
-        <p>{filters?.query}</p>
-        <p>{filters?.status}</p>
-        <p>{filters?.sort}</p>
         {isLoading ? (
           <TaskListLoading />
         ) : error ? (

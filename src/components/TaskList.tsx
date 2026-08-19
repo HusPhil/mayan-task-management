@@ -15,79 +15,6 @@ import DeleteTaskSheet from "./sheets/DeleteTaskSheet"
 import EditTaskSheet from "./sheets/EditTaskSheet"
 import { useState } from "react"
 
-const dummyData: TaskRead[] = [
-  {
-    id: "1",
-    title: "Review project requirements",
-    description: "Go through the PRD and identify key features for the MVP.",
-    created_at: "2026-08-17T07:02:26.347001Z",
-    status: TaskStatus.INCOMPLETE,
-  },
-  {
-    id: "2",
-    title: "Set up CI/CD pipeline",
-    description:
-      "Configure GitHub Actions for automated testing and deployment.",
-    created_at: "2026-08-18T08:10:07.547136Z",
-    status: TaskStatus.INCOMPLETE,
-  },
-  {
-    id: "3",
-    title: "Design database schema",
-    description: "Create ERD for users, tasks, and projects tables.",
-    created_at: "2026-08-18T09:34:13.564469Z",
-    status: TaskStatus.INCOMPLETE,
-  },
-
-  {
-    id: "5",
-    title: "Design database schema",
-    description: "Create ERD for users, tasks, and projects tables.",
-    created_at: "2026-08-18T09:34:13.564469Z",
-    status: TaskStatus.INCOMPLETE,
-  },
-
-  {
-    id: "7",
-    title: "Design database schema",
-    description: "Create ERD for users, tasks, and projects tables.",
-    created_at: "2026-08-18T09:34:13.564469Z",
-    status: TaskStatus.INCOMPLETE,
-  },
-
-  {
-    id: "8",
-    title: "Design database schema",
-    description: "Create ERD for users, tasks, and projects tables.",
-    created_at: "2026-08-18T09:34:13.564469Z",
-    status: TaskStatus.INCOMPLETE,
-  },
-
-  {
-    id: "9",
-    title: "Design database schema",
-    description: "Create ERD for users, tasks, and projects tables.",
-    created_at: "2026-08-18T09:34:13.564469Z",
-    status: TaskStatus.INCOMPLETE,
-  },
-
-  {
-    id: "10",
-    title: "Design database schema",
-    description: "Create ERD for users, tasks, and projects tables.",
-    created_at: "2026-08-18T09:34:13.564469Z",
-    status: TaskStatus.INCOMPLETE,
-  },
-
-  {
-    id: "11",
-    title: "Design database schema",
-    description: "Create ERD for users, tasks, and projects tables.",
-    created_at: "2026-08-18T09:34:13.564469Z",
-    status: TaskStatus.INCOMPLETE,
-  },
-].slice(0, 13)
-
 interface DropDownOptionsProps {
   task_id: string
   onEdit: (task_id: string) => void
@@ -133,7 +60,7 @@ function TaskCard({ onDelete, onEdit, task }: TaskCardProps) {
           <div className="flex items-start gap-3">
             <Checkbox
               className={"mt-0.5 cursor-pointer"}
-              checked={task.status === TaskStatus.COMPLETED}
+              defaultChecked={task.status === TaskStatus.COMPLETED}
             />
             <div>
               <div className="space-y-0.5">
@@ -169,12 +96,12 @@ export default function TaskList({ tasks }: TaskListProps) {
   const [taskToDelete, setTaskToDelete] = useState<TaskRead | null>()
 
   const handleEdit = (task_id: string) => {
-    const task = dummyData.find((t) => t.id === task_id)
+    const task = tasks.find((t) => t.id === task_id)
     setTaskToEdit(task)
   }
 
   const handleDelete = (task_id: string) => {
-    const task = dummyData.find((t) => t.id === task_id)
+    const task = tasks.find((t) => t.id === task_id)
     setTaskToDelete(task)
   }
 

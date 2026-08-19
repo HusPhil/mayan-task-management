@@ -3,6 +3,8 @@ import { TaskStatus } from "@/types/domain.types"
 import { Input } from "./ui/input"
 import { Search } from "lucide-react"
 import type { TaskSearchParams } from "@/api/params"
+import { useRef } from "react"
+import { useDebouncedCallback } from "use-debounce"
 
 interface FilterChipsProps {
   activeStatusFilters?: TaskStatus[]
@@ -49,6 +51,13 @@ interface FiltersProps {
 }
 
 export default function Filters({ filters, onUpdateFilters }: FiltersProps) {
+  const queryInputRef = useRef<HTMLInputElement>(null)
+
+  const handleQueryFilter = useDebouncedCallback(() => {
+    let queryText = queryInputRef.current?.value
+    onUpdateFilters({ ...filters, query: queryText })
+  }, 500)
+
   return (
     <div className="mb-3 space-y-2">
       <StatusFilterChips
@@ -62,8 +71,12 @@ export default function Filters({ filters, onUpdateFilters }: FiltersProps) {
       />
       <div className="relative">
         <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-muted-foreground" />
-
-        <Input className="pl-8" placeholder="Search tasks..." />
+        <Input
+          ref={queryInputRef}
+          className="pl-8"
+          placeholder="Search tasks..."
+          onChange={handleQueryFilter}
+        />
       </div>
     </div>
   )
