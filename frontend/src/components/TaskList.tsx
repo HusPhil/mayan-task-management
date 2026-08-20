@@ -84,7 +84,10 @@ function TaskCard({ task, onDelete, onEdit, onCheckError }: TaskCardProps) {
 
   return (
     <div className="h-fit p-1">
-      <Card key={task.id} className="p-0 transition-colors hover:bg-muted/50">
+      <Card
+        key={task.id}
+        className="overflow-auto p-0 transition-colors hover:bg-muted/50"
+      >
         <div className="flex items-start justify-between px-5 py-3">
           <div className="flex items-start gap-3">
             {isPending ? (
@@ -99,10 +102,14 @@ function TaskCard({ task, onDelete, onEdit, onCheckError }: TaskCardProps) {
             )}
             <div>
               <div className="space-y-0.5">
-                <p className="text-sm leading-snug font-medium text-foreground">
+                <p
+                  className={`text-sm leading-snug font-medium text-foreground ${task.status === TaskStatus.COMPLETED && "text-muted-foreground line-through"}`}
+                >
                   {task.title}
                 </p>
-                <p className="text-xs leading-relaxed text-muted-foreground">
+                <p
+                  className={`text-xs leading-relaxed whitespace-pre-line text-muted-foreground ${task.status === TaskStatus.COMPLETED && "text-muted-foreground line-through"}`}
+                >
                   {task.description}
                 </p>
               </div>
@@ -161,7 +168,7 @@ export default function TaskList({ tasks }: TaskListProps) {
           <span>{"Something went wrong. Please try again."}</span>
         </div>
       )}
-      <ScrollArea className="flex min-h-0 flex-1 flex-col mask-[linear-gradient(to_bottom,black_55%,transparent_100%)] pb-5">
+      <ScrollArea className="mb-5 flex min-h-0 flex-1 flex-col">
         <div className="flex flex-col gap-3">
           {tasks?.map((t) => (
             <TaskCard
