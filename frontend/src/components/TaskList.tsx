@@ -84,14 +84,11 @@ function TaskCard({ task, onDelete, onEdit, onCheckError }: TaskCardProps) {
 
   return (
     <div className="h-fit p-1">
-      <Card
-        key={task.id}
-        className="overflow-auto p-0 transition-colors hover:bg-muted/50"
-      >
-        <div className="flex items-start justify-between px-5 py-3">
+      <Card key={task.id} className="p-0 transition-colors hover:bg-muted/50">
+        <div className="flex items-start justify-between overflow-auto px-5 py-3">
           <div className="flex items-start gap-3">
             {isPending ? (
-              <Spinner />
+              <Spinner className="mt-0.5 size-4 shrink-0" />
             ) : (
               <Checkbox
                 className={"mt-0.5 cursor-pointer"}
