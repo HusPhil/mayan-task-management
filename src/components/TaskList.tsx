@@ -2,6 +2,7 @@ import type { TaskRead, TaskUpdate } from "@/types/api.types"
 import { TaskStatus } from "@/types/domain.types"
 import { Card } from "./ui/card"
 import { Checkbox } from "./ui/checkbox"
+import { ScrollArea } from "./ui/scroll-area"
 import { formatDate } from "@/utils/formatDate"
 import {
   DropdownMenu,
@@ -153,24 +154,26 @@ export default function TaskList({ tasks }: TaskListProps) {
   }
 
   return (
-    <div>
+    <div className="flex min-h-0 flex-1 flex-col">
       {isCheckError && (
         <div className="mt-2 flex items-center gap-2 rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>{"Something went wrong. Please try again."}</span>
         </div>
       )}
-      <div className="flex flex-1 flex-col gap-3 overflow-y-auto pb-5">
-        {tasks?.map((t) => (
-          <TaskCard
-            key={t.id}
-            task={t}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-            onCheckError={handleCheckError}
-          />
-        ))}
-      </div>
+      <ScrollArea className="flex min-h-0 flex-1 flex-col mask-[linear-gradient(to_bottom,black_55%,transparent_100%)] pb-5">
+        <div className="flex flex-col gap-3">
+          {tasks?.map((t) => (
+            <TaskCard
+              key={t.id}
+              task={t}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+              onCheckError={handleCheckError}
+            />
+          ))}
+        </div>
+      </ScrollArea>
       <DeleteTaskSheet
         task={taskToDelete ?? null}
         onOpenChange={(open) => {
