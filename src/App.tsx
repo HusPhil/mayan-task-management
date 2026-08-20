@@ -12,8 +12,8 @@ export function App() {
   const { data: tasks, isLoading, error } = useQuery(tasksQueryOption(filters))
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="flex h-full max-w-lg flex-1 flex-col px-3 md:px-0">
+    <div className="flex h-dvh items-center justify-center overflow-hidden">
+      <div className="flex h-full min-h-0 max-w-2xl flex-1 flex-col px-3 md:px-0">
         <Header />
         <Filters filters={filters} onUpdateFilters={updateFilters} />
         {isLoading ? (
